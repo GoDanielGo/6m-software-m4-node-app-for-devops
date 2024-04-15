@@ -15,6 +15,21 @@ jobs:
       - run:
           name: Install Dependencies
           command: npm install
+
+  deploy:
+    docker:
+       - image: cimg/node:16.10
+      steps:
+      - setup_remote_docker      
+      - heroku/install
+      - checkout
+      - run:
+          name: Heroku Container Push
+          command: | 
+              heroku container:login
+              heroku container:push web -a daniel-su-devops
+              heroku container:release web -a daniel-su-devops
+
   test:
     docker:
       - image: cimg/node:16.10
@@ -53,3 +68,6 @@ workflows:
       - build-and-push:
           requires:
             - test
+      - deploy:
+          requires:
+            - build-and-push
