@@ -33,7 +33,7 @@ jobs:
       - setup_remote_docker
       - run:
           name: Docker Login
-          command: echo "$DOCKERHUB_PASSWORD" | docker login --username $DOCKERHUB_USERNAME --password-stdin
+          command: echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
       - run:
           name: Build Docker Image
           command: |
