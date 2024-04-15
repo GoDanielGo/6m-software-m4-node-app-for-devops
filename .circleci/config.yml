@@ -1,8 +1,5 @@
 version: 2.1
 
-orbs:
-  node: circleci/node@5.0.1
-
 build:
   docker:
     - image: cimg/node:16.10
@@ -32,5 +29,8 @@ workflows:
       - test:
         requires:
           - build
+
+orbs:
+  node: circleci/node@5.0.1
 
 executor: docker/docker
