@@ -37,11 +37,11 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            docker build -t $DOCKERHUB_USERNAME/myapp:${CIRCLE_SHA1} .
+            docker build -t $DOCKERHUB_USERNAME/nodeapp:${CIRCLE_SHA1} .
       - run:
           name: Push Docker Image
           command: |
-            docker push $DOCKERHUB_USERNAME/myapp:${CIRCLE_SHA1}
+            docker push $DOCKERHUB_USERNAME/nodeapp:${CIRCLE_SHA1}
 
 workflows:
   simple_workflow:
