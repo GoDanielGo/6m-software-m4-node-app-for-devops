@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   node: circleci/node@5.0.1
-  docker: circleci/docker@1.0.0  # Corrected version
+  docker: circleci/docker@2.1.0  # Updated Docker Orb version
 
 jobs:
   build:
@@ -26,20 +26,22 @@ jobs:
           name: Run Tests
           command: npm run test
   build-and-push:
-    executor: docker/docker  # Ensuring using docker executor if defined properly
+    docker:
+      - image: cimg/node:16.10
     steps:
       - checkout
       - setup_remote_docker
-      - docker/check:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_PASSWORD
+      - run:
+          name: Docker Login
+          command: echo "$DOCKERHUB_PASSWORD" | docker login --username $DOCKERHUB_USERNAME --password-stdin
       - run:
           name: Build Docker Image
           command: |
             docker build -t $DOCKERHUB_USERNAME/myapp:${CIRCLE_SHA1} .
-      - docker/push:
-          image: $DOCKERHUB_USERNAME/myapp
-          tag: ${CIRCLE_SHA1}
+      - run:
+          name: Push Docker Image
+          command: |
+            docker push $DOCKERHUB_USERNAME/myapp:${CIRCLE_SHA1}
 
 workflows:
   simple_workflow:
