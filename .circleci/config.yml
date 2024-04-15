@@ -2,12 +2,7 @@ version: 2.1
 
 orbs:
   node: circleci/node@5.0.1
-  docker: circleci/docker@3.0.0
-
-executors:
-  docker:
-    docker:
-      - image: cimg/node:16.10
+  docker: circleci/docker@1.0.0  # Corrected version
 
 jobs:
   build:
@@ -17,10 +12,9 @@ jobs:
       - checkout
       - node/install-packages:
           pkg-manager: npm
-      - run: |
-          echo "Installing dependencies..."
-          npm install
-
+      - run:
+          name: Install Dependencies
+          command: npm install
   test:
     docker:
       - image: cimg/node:16.10
@@ -28,22 +22,21 @@ jobs:
       - checkout
       - node/install-packages:
           pkg-manager: npm
-      - run: |
-          echo "Running tests..."
-          npm run test
-
-build-and-push:
-    docker:
-      - image: cimg/node:16.10
+      - run:
+          name: Run Tests
+          command: npm run test
+  build-and-push:
+    executor: docker/docker  # Ensuring using docker executor if defined properly
     steps:
       - checkout
       - setup_remote_docker
       - docker/check:
-          docker-username: ${DOCKERHUB_USERNAME}
-          docker-password: ${DOCKERHUB_PASSWORD}
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
       - run:
           name: Build Docker Image
-          command: docker build -t $DOCKERHUB_USERNAME/myapp:${CIRCLE_SHA1} .
+          command: |
+            docker build -t $DOCKERHUB_USERNAME/myapp:${CIRCLE_SHA1} .
       - docker/push:
           image: $DOCKERHUB_USERNAME/myapp
           tag: ${CIRCLE_SHA1}
