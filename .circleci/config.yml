@@ -25,7 +25,7 @@ jobs:
       - run:
           name: Run Tests
           command: npm run test
-  build-and-push:
+  publish:
     docker:
       - image: cimg/node:16.10
     steps:
@@ -50,6 +50,6 @@ workflows:
       - test:
           requires:
             - build
-      - build-and-push:
+      - publish:
           requires:
             - test
