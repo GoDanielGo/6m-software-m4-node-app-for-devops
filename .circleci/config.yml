@@ -26,11 +26,11 @@ jobs:
           name: Run Tests
           command: npm run test
   publish:
-    docker:
-      - image: cimg/node:16.10
+    executor: docker/docker
     steps:
-      - checkout
       - setup_remote_docker
+      - checkout
+      - docker/check
       - run:
           name: Docker Login
           command: echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
