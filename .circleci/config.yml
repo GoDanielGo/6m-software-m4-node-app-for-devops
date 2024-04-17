@@ -26,22 +26,22 @@ jobs:
           name: Run Tests
           command: npm run test
   publish:
-    executor: docker/docker
+    docker:
+      - image: cimg/node:16.10
     steps:
-      - setup_remote_docker
       - checkout
-      - docker/check
+      - setup_remote_docker
       - run:
           name: Docker Login
           command: echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
       - run:
           name: Build Docker Image
           command: |
-            docker build -t $DOCKERHUB_USERNAME/nodeapp:v1.01 .
+            docker build -t $DOCKERHUB_USERNAME/nodeapp:${CIRCLE_SHA1} .
       - run:
           name: Push Docker Image
           command: |
-            docker push $DOCKERHUB_USERNAME/nodeapp:v1.01
+            docker push $DOCKERHUB_USERNAME/nodeapp:${CIRCLE_SHA1}
 
 workflows:
   simple_workflow:
