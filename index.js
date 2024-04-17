@@ -1,11 +1,11 @@
-function printHome(req, res) {
-    res.send("This is the home page");
-}
+require("dotenv").config();
+const express = require('express')
+const app = express()
 
-function createUser(req, res) {
-    const { name, email, password } = req.body;
-    // Here you might want to add logic to handle the user creation, e.g., validation, saving to a database, etc.
-    res.send(`Name: ${name}, Email: ${email}`);
-}
+const print = require("./controller");
 
-module.exports = { printHome, createUser };
+app.get('/', print);
+
+app.listen(process.env.PORT, ()=>{
+    console.log(`Listening to port ${process.env.PORT}`)
+})
