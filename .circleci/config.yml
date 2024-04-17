@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   node: circleci/node@5.0.1
   docker: circleci/docker@2.1.0  # Updated Docker Orb version
+  heroku: circleci/heroku@1.2.6
 
 jobs:
   build:
