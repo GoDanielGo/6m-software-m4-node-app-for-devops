@@ -47,7 +47,7 @@ jobs:
 
   scan:
     docker:
-        - image: cimg/node:16.10
+      - image: cimg/node:16.10
         environment:
             IMAGE_NAME: edisonzsq/education-space
         steps:
