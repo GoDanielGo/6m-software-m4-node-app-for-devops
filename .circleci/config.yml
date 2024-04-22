@@ -45,22 +45,9 @@ jobs:
           command: |
             docker push $DOCKERHUB_USERNAME/nodeapp:v1.01
 
-  deploy:
+  scan:
     docker:
-      - image: cimg/node:16.10
-    steps:
-      - setup_remote_docker      
-      - heroku/install
-      - checkout
-      - run:
-          name: Heroku Container Push
-          command: | 
-                heroku container:login
-                heroku container:push web -a daniel-su-devops
-                heroku container:release web -a daniel-su-devops
-      scan:
-        docker:
-            - image: cimg/node:16.10
+        - image: cimg/node:16.10
         environment:
             IMAGE_NAME: edisonzsq/education-space
         steps:
@@ -70,7 +57,7 @@ jobs:
             - run: docker build -t $IMAGE_NAME .
             - snyk/scan: 
                 docker-image-name: $IMAGE_NAME
-                      
+
 workflows:
   simple_workflow:
     jobs:
